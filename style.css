@@ -33,6 +33,7 @@ h1 {
   --dark-square: #b58863;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
   width: 100%;
   aspect-ratio: 1 / 1;
   border: 3px solid #333;
@@ -47,7 +48,11 @@ h1 {
   justify-content: center;
   cursor: pointer;
   font-size: clamp(20px, 5vw, 34px);
+  line-height: 1;
   user-select: none;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .square.light {
