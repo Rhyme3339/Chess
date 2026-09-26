@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chess</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <h1>♟ Chess</h1>
+
+    <div id="status" class="status">White to move</div>
+
+    <div id="board" class="board"></div>
+
+    <div class="controls">
+      <div class="control-row">
+        <label for="presetSelect">Theme:</label>
+        <select id="presetSelect">
+          <option value="classic">Classic</option>
+          <option value="neon">Neon</option>
+        </select>
+        <button id="restartBtn">Restart</button>
+      </div>
+
+      <div class="control-row">
+        <label for="themeUpload">Custom pieces:</label>
+        <input type="file" id="themeUpload" multiple accept="image/*" />
+      </div>
+      <p class="hint">
+        Upload 12 PNGs named exactly:
+        <code>wK, wQ, wR, wB, wN, wP, bK, bQ, bR, bB, bN, bP</code>
+        (white/black + King, Queen, Rook, Bishop, kNight, Pawn).
+      </p>
+      <p id="uploadStatus" class="hint"></p>
+    </div>
+  </div>
+
+  <div id="promotionModal" class="modal hidden">
+    <div class="modal-content">
+      <p>Promote pawn to:</p>
+      <button data-piece="Q">Queen</button>
+      <button data-piece="R">Rook</button>
+      <button data-piece="B">Bishop</button>
+      <button data-piece="N">Knight</button>
+    </div>
+  </div>
+
+  <script src="chess-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

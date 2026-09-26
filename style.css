@@ -1,0 +1,169 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #12121a;
+  color: #eee;
+  display: flex;
+  justify-content: center;
+  padding: 24px 12px;
+}
+
+.app {
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 8px;
+}
+
+.status {
+  margin-bottom: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 20px;
+}
+
+.board {
+  --light-square: #f0d9b5;
+  --dark-square: #b58863;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 3px solid #333;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: clamp(20px, 5vw, 34px);
+  user-select: none;
+}
+
+.square.light {
+  background: var(--light-square);
+}
+
+.square.dark {
+  background: var(--dark-square);
+}
+
+.square.selected {
+  outline: 3px solid #ffeb3b;
+  outline-offset: -3px;
+}
+
+.square.legal-target::after {
+  content: '';
+  position: absolute;
+  width: 28%;
+  height: 28%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.piece-symbol.piece-white {
+  color: #fff;
+  text-shadow: 0 0 2px #000, 0 0 2px #000;
+}
+
+.piece-symbol.piece-black {
+  color: #111;
+}
+
+.board.neon-theme .piece-symbol.piece-white {
+  color: #00eaff;
+  text-shadow: 0 0 6px #00eaff, 0 0 12px #00eaff;
+}
+
+.board.neon-theme .piece-symbol.piece-black {
+  color: #ff00d4;
+  text-shadow: 0 0 6px #ff00d4, 0 0 12px #ff00d4;
+}
+
+.piece-img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.controls {
+  margin-top: 18px;
+  text-align: left;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+select,
+button,
+input[type='file'] {
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #24243a;
+  color: #eee;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  background: #33334f;
+}
+
+.hint {
+  font-size: 11px;
+  color: #999;
+  margin: 4px 0;
+}
+
+.hint code {
+  color: #ccc;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #1e1e2f;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modal-content p {
+  margin: 0 0 12px;
+}
+
+.modal-content button {
+  margin: 4px;
+}
