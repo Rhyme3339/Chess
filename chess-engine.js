@@ -281,6 +281,7 @@
     getAllLegalMoves,
     applyMove,
     getGameStatus,
+    isInCheck,
     pieceColor,
     pieceType,
   };

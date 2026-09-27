@@ -17,6 +17,37 @@ body {
   text-align: center;
 }
 
+.screen {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.screen.hidden {
+  display: none;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 260px;
+  margin: 24px auto 0;
+}
+
+.menu-buttons button {
+  padding: 12px;
+  font-size: 15px;
+}
+
+.setup-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
 h1 {
   margin: 0 0 8px;
 }

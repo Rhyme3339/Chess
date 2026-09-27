@@ -30,6 +30,7 @@
     },
   };
 
+  // Game/session state
   let state = createInitialState();
   let selected = null;
   let legalTargets = [];
@@ -37,11 +38,32 @@
   let activeThemeName = 'classic';
   let customImages = null;
 
+  // Mode state
+  let gameMode = 'friend'; // 'friend' | 'ai'
+  let aiDifficulty = 'medium';
+  let humanColor = 'w'; // which color the human plays when gameMode === 'ai'
+
   const boardEl = document.getElementById('board');
   const statusEl = document.getElementById('status');
   const uploadStatusEl = document.getElementById('uploadStatus');
   const modal = document.getElementById('promotionModal');
 
+  // ---------- Screen management ----------
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach((el) => el.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  function startGame() {
+    state = createInitialState();
+    selected = null;
+    legalTargets = [];
+    showScreen('screen-game');
+    renderBoard();
+    maybeTriggerAI();
+  }
+
+  // ---------- Rendering ----------
   function renderBoard() {
     boardEl.innerHTML = '';
     const theme = PRESET_THEMES[activeThemeName] || PRESET_THEMES.classic;
@@ -49,9 +71,12 @@
     boardEl.style.setProperty('--dark-square', theme.dark);
     boardEl.classList.toggle('neon-theme', !!theme.neon);
 
-    for (let rank = 7; rank >= 0; rank--) {
-      for (let file = 0; file < 8; file++) {
-        const r = rank, c = file;
+    const flip = gameMode === 'ai' && humanColor === 'b';
+    const rankOrder = flip ? [0, 1, 2, 3, 4, 5, 6, 7] : [7, 6, 5, 4, 3, 2, 1, 0];
+    const fileOrder = flip ? [7, 6, 5, 4, 3, 2, 1, 0] : [0, 1, 2, 3, 4, 5, 6, 7];
+
+    for (const r of rankOrder) {
+      for (const c of fileOrder) {
         const square = document.createElement('div');
         square.className = 'square ' + ((r + c) % 2 === 0 ? 'light' : 'dark');
 
@@ -79,8 +104,14 @@
     updateStatus();
   }
 
+  // ---------- Interaction ----------
   function onSquareClick(r, c) {
     if (pendingPromotion) return;
+    if (gameMode === 'ai') {
+      const aiColor = humanColor === 'w' ? 'b' : 'w';
+      if (state.turn === aiColor) return; // not your turn
+    }
+
     const piece = state.board[r][c];
 
     if (selected) {
@@ -95,6 +126,7 @@
         selected = null;
         legalTargets = [];
         renderBoard();
+        maybeTriggerAI();
         return;
       }
       if (piece && pieceColor(piece) === state.turn) {
@@ -126,6 +158,7 @@
         legalTargets = [];
         modal.classList.add('hidden');
         renderBoard();
+        maybeTriggerAI();
       };
     });
   }
@@ -144,6 +177,24 @@
     }
   }
 
+  // ---------- AI ----------
+  function maybeTriggerAI() {
+    if (gameMode !== 'ai') return;
+    const aiColor = humanColor === 'w' ? 'b' : 'w';
+    if (state.turn !== aiColor) return;
+
+    const status = getGameStatus(state);
+    if (status === 'checkmate' || status === 'stalemate') return;
+
+    statusEl.textContent = '🤖 AI is thinking...';
+    setTimeout(() => {
+      const move = window.ChessAI.getBestMove(state, aiDifficulty);
+      if (move) state = applyMove(state, move, 'Q');
+      renderBoard();
+    }, 60);
+  }
+
+  // ---------- Theme / options ----------
   function fileToDataURL(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -181,12 +232,41 @@
     renderBoard();
   });
 
-  document.getElementById('restartBtn').addEventListener('click', () => {
-    state = createInitialState();
-    selected = null;
-    legalTargets = [];
-    renderBoard();
+  // ---------- Menu wiring ----------
+  document.getElementById('vsFriendBtn').addEventListener('click', () => {
+    gameMode = 'friend';
+    startGame();
   });
 
-  renderBoard();
+  document.getElementById('vsAiBtn').addEventListener('click', () => {
+    showScreen('screen-vsai-setup');
+  });
+
+  document.getElementById('optionsBtn').addEventListener('click', () => {
+    showScreen('screen-options');
+  });
+
+  document.getElementById('exitBtn').addEventListener('click', () => {
+    window.close();
+    setTimeout(() => {
+      alert("This tab can't be auto-closed by the page — feel free to close it yourself.");
+    }, 200);
+  });
+
+  document.getElementById('backFromAiBtn').addEventListener('click', () => showScreen('screen-menu'));
+  document.getElementById('backFromOptionsBtn').addEventListener('click', () => showScreen('screen-menu'));
+  document.getElementById('menuBtn').addEventListener('click', () => showScreen('screen-menu'));
+
+  document.getElementById('startAiBtn').addEventListener('click', () => {
+    aiDifficulty = document.getElementById('difficultySelect').value;
+    humanColor = document.getElementById('sideSelect').value;
+    gameMode = 'ai';
+    startGame();
+  });
+
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    startGame();
+  });
+
+  showScreen('screen-menu');
 })();

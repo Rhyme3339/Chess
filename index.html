@@ -6,33 +6,73 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app">
+
+  <div id="screen-menu" class="screen">
     <h1>♟ Chess</h1>
+    <div class="menu-buttons">
+      <button id="vsFriendBtn">vs Friend</button>
+      <button id="vsAiBtn">vs AI</button>
+      <button id="optionsBtn">Options</button>
+      <button id="exitBtn">Exit</button>
+    </div>
+  </div>
 
-    <div id="status" class="status">White to move</div>
+  <div id="screen-vsai-setup" class="screen hidden">
+    <h1>vs AI</h1>
+    <div class="setup-row">
+      <label for="difficultySelect">Difficulty:</label>
+      <select id="difficultySelect">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
+        <option value="impossible">Impossible</option>
+      </select>
+    </div>
+    <div class="setup-row">
+      <label for="sideSelect">Play as:</label>
+      <select id="sideSelect">
+        <option value="w" selected>White (moves first)</option>
+        <option value="b">Black</option>
+      </select>
+    </div>
+    <div class="menu-buttons">
+      <button id="startAiBtn">Start Game</button>
+      <button id="backFromAiBtn">Back</button>
+    </div>
+  </div>
 
-    <div id="board" class="board"></div>
+  <div id="screen-options" class="screen hidden">
+    <h1>Options</h1>
+    <div class="control-row">
+      <label for="presetSelect">Theme:</label>
+      <select id="presetSelect">
+        <option value="classic">Classic</option>
+        <option value="neon">Neon</option>
+      </select>
+    </div>
+    <div class="control-row">
+      <label for="themeUpload">Custom pieces:</label>
+      <input type="file" id="themeUpload" multiple accept="image/*" />
+    </div>
+    <p class="hint">
+      Upload 12 PNGs named exactly:
+      <code>wK, wQ, wR, wB, wN, wP, bK, bQ, bR, bB, bN, bP</code>
+    </p>
+    <p id="uploadStatus" class="hint"></p>
+    <div class="menu-buttons">
+      <button id="backFromOptionsBtn">Back</button>
+    </div>
+  </div>
 
-    <div class="controls">
+  <div id="screen-game" class="screen hidden">
+    <div class="app">
+      <h1>♟ Chess</h1>
+      <div id="status" class="status">White to move</div>
+      <div id="board" class="board"></div>
       <div class="control-row">
-        <label for="presetSelect">Theme:</label>
-        <select id="presetSelect">
-          <option value="classic">Classic</option>
-          <option value="neon">Neon</option>
-        </select>
         <button id="restartBtn">Restart</button>
+        <button id="menuBtn">Menu</button>
       </div>
-
-      <div class="control-row">
-        <label for="themeUpload">Custom pieces:</label>
-        <input type="file" id="themeUpload" multiple accept="image/*" />
-      </div>
-      <p class="hint">
-        Upload 12 PNGs named exactly:
-        <code>wK, wQ, wR, wB, wN, wP, bK, bQ, bR, bB, bN, bP</code>
-        (white/black + King, Queen, Rook, Bishop, kNight, Pawn).
-      </p>
-      <p id="uploadStatus" class="hint"></p>
     </div>
   </div>
 
@@ -47,6 +87,7 @@
   </div>
 
   <script src="chess-engine.js"></script>
+  <script src="ai.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
