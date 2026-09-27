@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Chess: New Tab Game",
+  "version": "1.0.0",
+  "description": "Play chess against a friend or an AI, opened in a new tab from the toolbar.",
+  "action": {
+    "default_title": "Open Chess"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
